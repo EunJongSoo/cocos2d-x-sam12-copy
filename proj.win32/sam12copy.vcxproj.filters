@@ -10,27 +10,45 @@
     <Filter Include="src">
       <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\0. etc">
+      <UniqueIdentifier>{44980920-6a4a-4cce-8812-67fd44b00823}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\1. PlayScene">
+      <UniqueIdentifier>{f19e01ed-ea02-4257-8781-5bf495da1b1c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\AppDelegate.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\Classes\PlayScene.cpp">
+      <Filter>src\1. PlayScene</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\HelloWorldScene.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\Classes\UILayer.cpp">
+      <Filter>src\1. PlayScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\AppDelegate.cpp">
+      <Filter>src\0. etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\UnitLayer.cpp">
+      <Filter>src\1. PlayScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
       <Filter>win32</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\AppDelegate.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\Classes\PlayScene.h">
+      <Filter>src\1. PlayScene</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\HelloWorldScene.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\Classes\UILayer.h">
+      <Filter>src\1. PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\AppDelegate.h">
+      <Filter>src\0. etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\UnitLayer.h">
+      <Filter>src\1. PlayScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
