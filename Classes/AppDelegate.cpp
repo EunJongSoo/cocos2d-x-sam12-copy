@@ -75,7 +75,6 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // create a scene. it's an autorelease object
     auto scene = CPlayScene::create();
-
     // run
     director->runWithScene(scene);
 
