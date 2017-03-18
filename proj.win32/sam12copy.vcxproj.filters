@@ -33,6 +33,12 @@
     <ClCompile Include="..\Classes\UnitLayer.cpp">
       <Filter>src\1. PlayScene</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\PickingManager.cpp">
+      <Filter>src\0. etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\PathFindingManager.cpp">
+      <Filter>src\0. etc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -49,6 +55,18 @@
     </ClInclude>
     <ClInclude Include="..\Classes\UnitLayer.h">
       <Filter>src\1. PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Path.h">
+      <Filter>src\1. PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TemplateSingleton.h">
+      <Filter>src\0. etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PickingManager.h">
+      <Filter>src\0. etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PathFindingManager.h">
+      <Filter>src\0. etc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
