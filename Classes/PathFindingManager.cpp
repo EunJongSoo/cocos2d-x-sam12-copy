@@ -1,8 +1,10 @@
 #include "PathFindingManager.h"
+#include "Path.h"
 
-USING_NS_CC;
-
-PathFindingManager::PathFindingManager() {}
+PathFindingManager::PathFindingManager(const int _size_x, const int _size_y, const int _size_cell)
+	: start_path(nullptr), end_path(nullptr), size_x(_size_x), size_y(_size_y), size_cell(_size_cell)
+{
+}
 PathFindingManager::~PathFindingManager() {}
 
 void PathFindingManager::goal_path_back_erase() {
@@ -13,153 +15,198 @@ void PathFindingManager::goal_path_back_erase() {
 	}
 }
 
-void PathFindingManager::init_path()
-{
-	for (int i = 0; i < open_path.size(); ++i) {
-		delete open_path[i];
+void PathFindingManager::init_path() {
+	int size = open_path_vector.size();
+	for (int i = 0; i < size; ++i) {
+		delete open_path_vector[i];
 	}
-	open_path.clear();
-	for (int i = 0; i < close_path.size(); ++i) {
-		delete close_path[i];
+	open_path_vector.clear();
+	
+	size = close_path_vector.size();
+	for (int i = 0; i < size; ++i) {
+		delete close_path_vector[i];
 	}
-	close_path.clear();
-	for (int i = 0; i < close_path.size(); ++i) {
+	close_path_vector.clear();
+	
+	size = goal_path.size();
+	for (int i = 0; i < size; ++i) {
 		delete goal_path[i];
 	}
 	goal_path.clear();
 }
 
-void PathFindingManager::finding_path(const Point& _start_point, const Point& _end_point) {
+void PathFindingManager::finding_path(const int _str_x, const int _str_y, 
+										const int _end_x, const int _end_y) 
+{
 	init_path();
 
-	start_path = new Path(_start_point.x, _start_point.y, 0);
-	end_path = new Path(_end_point.x, _end_point.y, 0);
+	start_path = new Path(_str_x, _str_y, _str_y * size_x + _str_x, nullptr);
+	end_path = new Path(_end_x, _end_y, _end_y * size_x + _end_x, nullptr);
 
-	start_path->g = 0;
-	start_path->h = start_path->manhattan_distance(end_path);
+	start_path->consumption_cost = 0.0f;
+	start_path->expected_cost = start_path->manhattan_distance(end_path);
 
-	open_path.push_back(start_path);
+	open_path_vector.push_back(start_path);
 
 	// 길 찾는 중
-	while (!finding_process());
-	// 길 찾기 성공하면 ~
+	finding_process();
 }
 
-bool PathFindingManager::finding_process() {
-	Path* path = search_next_path();
-	// 다음 path가 목적지 인지 검사합니다.
-	if (is_destination_arrival(path)) {
-		return true;
+void PathFindingManager::finding_process() {
+	Path* path;
+	while (true) {
+		path = search_next_path();
+		if (is_goal(path->idx)) break;
+		search_around_path(path);
 	}
-	// 도착 못했을시 주변 검사
-	search_around_path(path);
-	return false;
+	record_path(path);
 }
+
+const bool PathFindingManager::is_goal(const int _idx) const {
+	return (end_path->idx == _idx);
+}
+
+void PathFindingManager::record_path(const Path* const _path) {
+	end_path->set_parent(_path->get_parent());
+	Path* get_path;
+	// 목적지 이면 도착지부터 시작점 까지 경로를 저장합니다.
+	for (get_path = end_path; get_path != nullptr; get_path = get_path->get_parent()) {
+		goal_path.push_back(new vec2(get_path->x * size_cell, get_path->y * size_cell));
+	}
+}
+
 
 Path* PathFindingManager::search_next_path() {
-	// open_path가 비었으면 nullptr을 반환합니다.
-	if (open_path.empty()) return nullptr;
-
 	// 임시로 f에 큰 값을 주고 open_path에 있는 값 중에서 가장 작은 값을 찾습니다.
-	float best_f = 9999999.0f;
-	int location = 0;
-	for (int i = 0; i < open_path.size(); ++i) {
-		if (open_path[i]->get_f() < best_f) {
-			best_f = open_path[i]->get_f();
+	float best_cost = 9999999.0f;
+	int location = 0, size = open_path_vector.size();
+	for (int i = 0; i < size; ++i) {
+		if (open_path_vector[i]->get_cost() < best_cost) {
+			best_cost = open_path_vector[i]->get_cost();
 			location = i;
 		}
 	}
 	// 가장 f값이 작은 path를 close_path에 등록하고, open_path에서 빼줍니다.
-	close_path.push_back(open_path[location]);
-	open_path.erase(open_path.begin() + location);
+	close_path_vector.push_back(open_path_vector[location]);
+	open_path_vector.erase(open_path_vector.begin() + location);
 
 	// 마지막에 등록된 값을 반환 합니다.
-	return close_path.back();
+	return close_path_vector.back();
 }
 
-bool PathFindingManager::is_destination_arrival(Path* path) {
-	if (end_path->index == path->index) {
-		end_path->parent = path->parent;
-		Path* get_path;
-		// 목적지 이면 도착지부터 시작점 까지 경로를 저장합니다.
-		for (get_path = end_path; get_path != NULL; get_path = get_path->parent) {
-			goal_path.push_back(new Vec2(get_path->x * SIZE_CELL, get_path->y * SIZE_CELL));
-		}
-		return true;
-	}
-	return false;
-}
-
-void PathFindingManager::search_around_path(Path* path) {
+void PathFindingManager::search_around_path(Path* const path) {
 	// 주변 좌표를 검색하고, 조건에 맞으면 open_path에 추가한다.
-	path_value tmp_value;
-	int tx = 0, ty = 0, index = 0;
-	for (int i = 0; i < Direction::dir_count; ++i) {
-		tmp_value.set_value(i);
-		tx = path->x + tmp_value.x;
-		ty = path->y + tmp_value.y;
-		index = ty * SIZE_X + tx;
-		// 맵 밖 또는 close_path 이면 추가하지 않는다.
-		if (is_out_bounds(tx, ty) || is_close_path(index)) continue;
-		
-
-		// *************** 갈수 없는 지역도 검사해야한다. ***************
-		//if (map[ty][tx] == 1) continue;
-
-
-		path_open(tx, ty, tmp_value.cost, path);
-	}
+	int x = path->x;
+	int y = path->y;
+	// left
+	open_path(x + 1, y, 1, path);
+	// right
+	open_path(x - 1, y, 1, path);
+	// up
+	open_path(x, y + 1, 1, path);
+	// down
+	open_path(x, y - 1, 1, path);
+	// up_right
+	open_path(x + 1, y + 1, 1.414f, path);
+	// down_right
+	open_path(x + 1, y - 1, 1.414f, path);
+	// up_left
+	open_path(x - 1, y + 1, 1.414f, path);
+	// up_left
+	open_path(x - 1, y - 1, 1.414f, path);
 }
 
+void PathFindingManager::open_path(const int _x, const int _y, const int _cost, Path* const _parent) {
+	// 맵 밖 또는 close_path 이면 추가하지 않는다.
+	int idx = _y * size_x + _x;
+	
+	if (is_out_bounds(_x, _y)) return;
+	if (close_path_overlap(idx)) return;
 
-bool PathFindingManager::is_out_bounds(float x, float y) {
-	// 좌표값이 맵 밖이면 ture, 안쪽이면 false를 반환한다.
-	if (x < 0 || x >= SIZE_X || y < 0 || y >= SIZE_Y) {
-		return true;
-	}
-	return false;
-}
+	// *************** 갈수 없는 지역도 검사해야한다. ***************
+	//if (map[ty][tx] == 1) continue;
 
-
-bool PathFindingManager::is_close_path(int _index) {
-	// close_path에 등록되었으면 true, 아니면 false를 반환한다.
-	for (int i = 0; i < close_path.size(); ++i) {
-		if (_index == close_path[i]->index) {
-			return true;
-		}
-	}
-	return false;
-}
-
-
-void PathFindingManager::path_open(int _tx, int _ty, int _cost, Path* _parent) {
 	// path를 등록 opne_path에 등록해준다.
 	// 단 이미 등록된 path는 비용을 비교 해준다.
-	Path* new_path = new Path(_tx, _ty, _parent);
-	new_path->g = _cost;
-	new_path->h = new_path->manhattan_distance(end_path);
-	for (int i = 0; i < open_path.size(); ++i) {
-		if (new_path->index == open_path[i]->index) {
-			// path_value 값 변경이 실패하면 open_path에 추가하지 않고 함수를 중단한다.
-			if (!update_path_value(new_path, _cost, i)) return;
-		}
+	Path* new_path = new Path(_x, _y, idx, _parent);
+	new_path->consumption_cost = _parent->consumption_cost + _cost;
+	new_path->expected_cost = new_path->manhattan_distance(end_path);
+	
+	int location = open_path_overlap(idx);
+	if (location != -1) {
+		update_path_value(_cost, location, new_path);
+		return;
 	}
 	// 값 변경에 성공하거나 등록되지 않았다면 open_path에 추가 한다.
-	open_path.push_back(new_path);
+	open_path_vector.push_back(new_path);
 }
 
-
-bool PathFindingManager::update_path_value(Path* _path, int _cost, int i) {
-	// g 값을 비교해서 더 낮다면 g 값과 parent를 변경하고 true를 반환
-	float new_f = _path->g + _cost + open_path[i]->h;
-	if (new_f < open_path[i]->get_f()) {
-		open_path[i]->g = _path->g + _cost;
-		open_path[i]->parent = _path;
-		return true;
+const bool PathFindingManager::close_path_overlap(const int _idx) const {
+	int size = close_path_vector.size();
+	for (int i = 0; i < size; ++i) {
+		if (_idx == close_path_vector[i]->idx)
+			return true;
 	}
-	// 아니라면 할당을 해제하고 flase를 반환한다.
-	else {
-		delete _path;
-		return false;
+	return false;
+}
+
+const int PathFindingManager::open_path_overlap(const int _idx) const {
+	int size = open_path_vector.size();
+	int j = -1;
+	for (int i = 0; i < size; ++i) {
+		if (_idx == open_path_vector[i]->idx) {
+			j = i;
+			break;
+		}
+	}
+	return j;
+}
+
+void PathFindingManager::update_path_value(const int _cost, const int i, Path* const _new_path) {
+	// 기존에 저장된 경로와 신규 경로를 비교해서 cost가 낮으면 변경한다.
+	if (_new_path->get_cost() < open_path_vector[i]->get_cost()) {
+		delete open_path_vector[i];
+		open_path_vector[i] = _new_path;
+
+		/*open_path_vector[i]->consumption_cost = _new_path->consumption_cost;
+		open_path_vector[i]->expected_cost = _new_path->expected_cost;
+		open_path_vector[i]->parent = _new_path->parent;
+		delete _new_path;*/
 	}
 }
+
+//void PathFindingManager::open_path(const int _x, const int _y, const int _cost, Path* const _parent) {
+//	int idx = _y * size_x + _x;
+//	if (is_out_bounds(_x, _y)) return;
+//	if (close_path_overlap(idx)) return;
+//
+//	Path* new_path = new Path(_x, _y, idx, _parent);
+//	new_path->consumption_cost = _cost;
+//	new_path->expected_cost = new_path->manhattan_distance(end_path);
+//	int size = open_path_vector.size();
+//
+//	for (int i = 0; i < size; ++i) {
+//		if (idx == open_path_vector[i]->idx) {
+//			if (!update_path_value(_cost, i, new_path)) return;
+//			//update_path_value(_cost, i, new_path);
+//			return;
+//		}
+//	}
+//	open_path_vector.push_back(new_path);
+//}
+
+//const bool update_path_value(const int _cost, const int i, Path* const _path) const;
+//const bool PathFindingManager::update_path_value(const int _cost, const int i, Path* const _new_path) const {
+//	// g 값을 비교해서 더 낮다면 g 값과 parent를 변경하고 true를 반환
+//	float new_f = _new_path->consumption_cost + _cost + open_path_vector[i]->expected_cost;
+//	if (new_f < open_path_vector[i]->get_cost()) {
+//		open_path_vector[i]->consumption_cost = _new_path->consumption_cost + _cost;
+//		open_path_vector[i]->parent = _new_path;
+//		return true;
+//	}
+//	// 아니라면 할당을 해제하고 flase를 반환한다.
+//	else {
+//	delete _new_path;
+//	return false;
+//	}
+//}

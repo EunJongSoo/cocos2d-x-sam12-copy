@@ -5,22 +5,27 @@
 
 class Path {
 public:
-	Path() : parent(0) {}
-	Path(int _x, int _y, Path* _parent = 0) 
-		: x(_x), y(_y), index(_y * SIZE_X + _x), g(0), h(0), parent(_parent) {}
+	Path() : parent(nullptr) {}
+	Path(int _x, int _y, int _idx, Path* _parent = nullptr)
+		: x(_x), y(_y), idx(_idx), consumption_cost(0.0f), expected_cost(0.0f), parent(_parent) {}
 	~Path() {}
 
-	float get_f() { return g + h; }
-	float manhattan_distance(Path* _end_path) {
+	Path* get_parent() const { return parent; }
+	void set_parent(Path* _parent) { parent = _parent; }
+	inline const float get_cost() const { return consumption_cost + expected_cost; }
+	const float manhattan_distance(Path* _end_path) const {
 		float fx = fabs(x - _end_path->x);
 		float fy = fabs(y - _end_path->y);
 		return fx + fy;
 	}
+	
 	int x;
 	int y;
-	int index;
-	float g;
-	float h;
+	unsigned int idx;
+	float consumption_cost;
+	float expected_cost;
+
+private:
 	Path* parent;
 };
 
