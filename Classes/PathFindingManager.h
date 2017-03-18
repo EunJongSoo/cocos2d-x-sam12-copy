@@ -14,14 +14,15 @@ public:
 		unsigned int x;
 		unsigned int y;
 	};
-
+	PathFindingManager();
 	PathFindingManager(const int _size_x, const int _size_y, const int _size_cell);
 	~PathFindingManager();
-	void finding_path(const int _str_x, const int _str_y, 
-						const int _end_x, const int _end_y);
+	void finding_path(const float _str_x, const float _str_y,
+		const float _end_x, const float _end_y);
 	void goal_path_back_erase();
 	vector<vec2*> goal_path;
 private:
+	
 	enum Direction {
 		up, down, right, left,
 		upper_left, lower_right, lower_left, upper_right, dir_count

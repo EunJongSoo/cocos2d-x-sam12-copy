@@ -1,9 +1,12 @@
 #include "PathFindingManager.h"
 #include "Path.h"
 
+PathFindingManager::PathFindingManager() 
+	: start_path(nullptr), end_path(nullptr), size_x(192), size_y(128), size_cell(5.0f)  {
+
+}
 PathFindingManager::PathFindingManager(const int _size_x, const int _size_y, const int _size_cell)
-	: start_path(nullptr), end_path(nullptr), size_x(_size_x), size_y(_size_y), size_cell(_size_cell)
-{
+	: start_path(nullptr), end_path(nullptr), size_x(_size_x), size_y(_size_y), size_cell(_size_cell) {
 }
 PathFindingManager::~PathFindingManager() {}
 
@@ -35,13 +38,18 @@ void PathFindingManager::init_path() {
 	goal_path.clear();
 }
 
-void PathFindingManager::finding_path(const int _str_x, const int _str_y, 
-										const int _end_x, const int _end_y) 
+void PathFindingManager::finding_path(const float _str_x, const float _str_y, 
+										const float _end_x, const float _end_y) 
 {
 	init_path();
 
-	start_path = new Path(_str_x, _str_y, _str_y * size_x + _str_x, nullptr);
-	end_path = new Path(_end_x, _end_y, _end_y * size_x + _end_x, nullptr);
+	int str_x = _str_x / size_cell;
+	int str_y = _str_y / size_cell;
+	int end_x = _end_x / size_cell;
+	int end_y = _end_y / size_cell;
+
+	start_path = new Path(str_x, str_y, str_y * size_x + str_x, nullptr);
+	end_path = new Path(end_x, end_y, end_y * size_x + end_x, nullptr);
 
 	start_path->consumption_cost = 0.0f;
 	start_path->expected_cost = start_path->manhattan_distance(end_path);

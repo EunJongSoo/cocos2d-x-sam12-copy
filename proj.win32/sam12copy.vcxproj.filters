@@ -39,6 +39,12 @@
     <ClCompile Include="..\Classes\PathFindingManager.cpp">
       <Filter>src\0. etc</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\UnitManager.cpp">
+      <Filter>src\1. PlayScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\UnitSprite.cpp">
+      <Filter>src\1. PlayScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -67,6 +73,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\PathFindingManager.h">
       <Filter>src\0. etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\UnitManager.h">
+      <Filter>src\1. PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\UnitSprite.h">
+      <Filter>src\1. PlayScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -6,14 +6,14 @@
 class Path {
 public:
 	Path() : parent(nullptr) {}
-	Path(int _x, int _y, int _idx, Path* _parent = nullptr)
+	Path(const int _x, const int _y, const int _idx, Path* const _parent = nullptr)
 		: x(_x), y(_y), idx(_idx), consumption_cost(0.0f), expected_cost(0.0f), parent(_parent) {}
 	~Path() {}
 
 	Path* get_parent() const { return parent; }
-	void set_parent(Path* _parent) { parent = _parent; }
+	void set_parent(Path* const _parent) { parent = _parent; }
 	inline const float get_cost() const { return consumption_cost + expected_cost; }
-	const float manhattan_distance(Path* _end_path) const {
+	const float manhattan_distance(Path* const _end_path) const {
 		float fx = fabs(x - _end_path->x);
 		float fy = fabs(y - _end_path->y);
 		return fx + fy;

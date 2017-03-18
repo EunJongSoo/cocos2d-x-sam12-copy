@@ -150,6 +150,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\PlayScene.cpp" />
     <ClCompile Include="..\Classes\UILayer.cpp" />
     <ClCompile Include="..\Classes\UnitLayer.cpp" />
+    <ClCompile Include="..\Classes\UnitManager.cpp" />
+    <ClCompile Include="..\Classes\UnitSprite.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +163,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\TemplateSingleton.h" />
     <ClInclude Include="..\Classes\UILayer.h" />
     <ClInclude Include="..\Classes\UnitLayer.h" />
+    <ClInclude Include="..\Classes\UnitManager.h" />
+    <ClInclude Include="..\Classes\UnitSprite.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>

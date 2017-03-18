@@ -7,12 +7,12 @@
 
 //using namespace std;
 
-class CPickingManager : public cocos2d::Node {
+class PickingManager : public cocos2d::Node {
 public:
-	CPickingManager();
-	virtual ~CPickingManager();
+	PickingManager();
+	virtual ~PickingManager();
 	virtual bool init();
-	CREATE_FUNC(CPickingManager);
+	CREATE_FUNC(PickingManager);
 	//list<cocos2d::EventMouse*>* eventlist;
 
 private:
