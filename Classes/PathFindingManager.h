@@ -19,7 +19,7 @@ public:
 	~PathFindingManager();
 	void finding_path(const float _str_x, const float _str_y,
 		const float _end_x, const float _end_y);
-	void goal_path_back_erase();
+	void goal_path_clear();
 	vector<vec2*> goal_path;
 private:
 	
@@ -32,9 +32,9 @@ private:
 	const float size_cell;
 
 	void init_path();
+	void path_vector_clear(vector<Path*>& _vector);
 	void finding_process();
 	Path* search_next_path();
-	
 	void search_around_path(Path* const _path);
 	void open_path(const int _x, const int _y, const int _cost, Path* const _parent);
 	inline const bool is_out_bounds(const float _x, const float _y) const;

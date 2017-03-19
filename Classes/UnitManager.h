@@ -5,6 +5,7 @@
 #include "cocos2d.h"
 #include "UnitSprite.h"
 
+class PathFindingManager;
 class UnitManager {
 public:
 	UnitManager();
@@ -19,6 +20,7 @@ public:
 private:
 	std::vector<CUnitSprite*> unit_vector;
 	std::vector<CUnitSprite*> selete_unit_vector;
+	PathFindingManager* path_manager;
 };
 
 #endif

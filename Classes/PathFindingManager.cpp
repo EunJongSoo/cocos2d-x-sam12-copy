@@ -10,30 +10,22 @@ PathFindingManager::PathFindingManager(const int _size_x, const int _size_y, con
 }
 PathFindingManager::~PathFindingManager() {}
 
-void PathFindingManager::goal_path_back_erase() {
-	if (!goal_path.empty()) {
-		int idx = 1;
-		delete goal_path.back();
-		goal_path.erase(goal_path.end() - idx);
-	}
+void PathFindingManager::init_path() {
+	path_vector_clear(open_path_vector);
+	path_vector_clear(close_path_vector);
+	goal_path_clear();
 }
 
-void PathFindingManager::init_path() {
-	int size = open_path_vector.size();
-	for (int i = 0; i < size; ++i) {
-		delete open_path_vector[i];
+void PathFindingManager::path_vector_clear(vector<Path*>& _vector) {
+	for (Path* path : _vector) {
+		delete path;
 	}
-	open_path_vector.clear();
-	
-	size = close_path_vector.size();
-	for (int i = 0; i < size; ++i) {
-		delete close_path_vector[i];
-	}
-	close_path_vector.clear();
-	
-	size = goal_path.size();
-	for (int i = 0; i < size; ++i) {
-		delete goal_path[i];
+	_vector.clear();
+}
+
+void PathFindingManager::goal_path_clear() {
+	for (vec2* vec2 : goal_path) {
+		delete vec2;
 	}
 	goal_path.clear();
 }
@@ -87,12 +79,14 @@ void PathFindingManager::record_path(const Path* const _path) {
 Path* PathFindingManager::search_next_path() {
 	// 임시로 f에 큰 값을 주고 open_path에 있는 값 중에서 가장 작은 값을 찾습니다.
 	float best_cost = 9999999.0f;
-	int location = 0, size = open_path_vector.size();
-	for (int i = 0; i < size; ++i) {
-		if (open_path_vector[i]->get_cost() < best_cost) {
-			best_cost = open_path_vector[i]->get_cost();
+	int location = 0, i = 0;
+
+	for (Path* path : open_path_vector) {
+		if (best_cost > path->get_cost()) {
+			best_cost = path->get_cost();
 			location = i;
 		}
+		++i;
 	}
 	// 가장 f값이 작은 path를 close_path에 등록하고, open_path에서 빼줍니다.
 	close_path_vector.push_back(open_path_vector[location]);
@@ -150,9 +144,8 @@ void PathFindingManager::open_path(const int _x, const int _y, const int _cost, 
 }
 
 const bool PathFindingManager::close_path_overlap(const int _idx) const {
-	int size = close_path_vector.size();
-	for (int i = 0; i < size; ++i) {
-		if (_idx == close_path_vector[i]->idx)
+	for (Path* path : close_path_vector) {
+		if (_idx == path->idx)
 			return true;
 	}
 	return false;
@@ -160,14 +153,16 @@ const bool PathFindingManager::close_path_overlap(const int _idx) const {
 
 const int PathFindingManager::open_path_overlap(const int _idx) const {
 	int size = open_path_vector.size();
-	int j = -1;
-	for (int i = 0; i < size; ++i) {
-		if (_idx == open_path_vector[i]->idx) {
-			j = i;
+	int location = -1, i = 0;
+
+	for (Path* path : open_path_vector) {
+		if (_idx == path->idx) {
+			location = i;
 			break;
 		}
+		++i;
 	}
-	return j;
+	return location;
 }
 
 void PathFindingManager::update_path_value(const int _cost, const int i, Path* const _new_path) {

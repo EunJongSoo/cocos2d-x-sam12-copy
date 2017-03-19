@@ -79,26 +79,24 @@ void PickingManager::on_mouse_up_left(const Vec2& _vec2) {
 
 CUnitSprite* PickingManager::get_unit_sprite(const Vector<Node*>& _vector, const Vec2& _vec2)
 {
-	int size = _vector.size();
-	for (int i = 0; i < size; ++i) {
-		Rect bounding = _vector.at(i)->getBoundingBox();
+	for (Node* node : _vector) {
+		Rect bounding = node->getBoundingBox();
 		if (bounding.containsPoint(_vec2)) {
-			return static_cast<CUnitSprite*>(_vector.at(i));
+			return static_cast<CUnitSprite*>(node);
 		}
 	}
 	return nullptr;
 }
 
 void PickingManager::on_mouse_up_right(const Vec2& _vec2) {
-	EffectSprite* eff = EffectSprite::create();
+
+	// ¿ÀÇÂÁö¿¤ ¿¡·¯¹ß»ý
+	/*EffectSprite* eff = EffectSprite::create();
 	unit_layer->addChild(eff);
 	eff->setPosition(_vec2);
-	eff->run_action_animate();
+	eff->run_action_animate();*/
 
 	unit_manager->move_unit(_vec2);
-
-
-
 }
 
 
