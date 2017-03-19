@@ -90,17 +90,35 @@ void CUnitSprite::hit(const int _attack) {
 
 void CUnitSprite::update(float _dt) {
 	// 조건 점검 필요
-	if (action_tag != move) return;
-
+	if (action_tag < move && action_tag > move_down_right) return;
 	goal_target_pos();
+
 	if (move_target != nullptr) {
 		Vec2 direction = (*move_target) - _position;
 		direction.normalize();
+
 		// ********** 액션 동작 ***********
 		this->setPosition(_position + (direction * move_speed));
 	}
 	else {
 		this->unscheduleUpdate();
+	}
+}
+
+void CUnitSprite::check_move_action(const cocos2d::Vec2 & _dir) {
+	if (_dir.y > 0) {
+		if (_dir.x > 0)			action_tag = action_list::move_up_right;
+		else if (_dir.x < 0)	action_tag = action_list::move_up_left;
+		else					action_tag = action_list::move_up;
+	}
+	else if (_dir.y < 0) {
+		if (_dir.x > 0)			action_tag = action_list::move_down_right;
+		else if (_dir.x < 0)	action_tag = action_list::move_down_left;
+		else					action_tag = action_list::move_down;
+	}
+	else {
+		if (_dir.x > 0)			action_tag = action_list::move_right;
+		else if (_dir.x < 0)	action_tag = action_list::move_left;
 	}
 }
 

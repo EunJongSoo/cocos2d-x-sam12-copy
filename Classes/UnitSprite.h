@@ -40,6 +40,7 @@ public:
 private:
 	void set_action_animate(const int _action);
 	virtual void update(float _dt);
+	void check_move_action(const cocos2d::Vec2& _dir);
 	void goal_target_pos();
 
 	void run_action_blinking();
