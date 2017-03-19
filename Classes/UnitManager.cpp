@@ -12,7 +12,7 @@ UnitManager::~UnitManager() {
 CUnitSprite* UnitManager::create_unit() {
 	CUnitSprite* sprite = CUnitSprite::create();
 	sprite->setPosition(500, 300);
-	sprite->setAnchorPoint(Vec2::ZERO);
+	sprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	return sprite;
 }
 
@@ -32,13 +32,19 @@ void UnitManager::selete_unit(CUnitSprite* const _unit) {
 void UnitManager::blinking_selete_unit() {
 	int size = selete_unit_vector.size();
 	for (int i = 0; i < size; ++i) {
-		selete_unit_vector[i]->run_action_blinking_sprite();
+		selete_unit_vector[i]->run_action_animate(CUnitSprite::action_list::blinking);
 	}
 }
 
 void UnitManager::move_unit(const Vec2& _vec2) {
 	int size = selete_unit_vector.size();
 	for (int i = 0; i < size; ++i) {
-		selete_unit_vector[i]->run_action_move_unit(_vec2);
+		//selete_unit_vector[i]->run_action_move_unit(_vec2);
+
+
+		//Vec2 start_pos = selete_unit_vector[i]->getPosition();
+
+
+
 	}
 }

@@ -1,9 +1,14 @@
 #include "UnitSprite.h"
-#include "PathFindingManager.h"
+#include "BlinkingAnimate.h"
 
 using namespace cocos2d;
 
-CUnitSprite::CUnitSprite() {
+CUnitSprite::CUnitSprite():
+	action_animate(nullptr), move_target(NULL),
+	hp(10), attack(1), defence(1), attack_speed(1.0f), move_speed(1.0f)
+{
+
+	
 }
 
 CUnitSprite::~CUnitSprite() {
@@ -14,68 +19,76 @@ bool CUnitSprite::init()
 	assert(Sprite::init());
 
 	this->initWithFile("CloseNormal.png");
-
-	path_manager = new PathFindingManager();
-
-	move_animate;
-	attack_animate;
-
-
 	
-	FadeIn* fade_in = FadeIn::create(0.3f);
-	FadeOut* fade_out = FadeOut::create(0.3f);
-	Sequence* seq = Sequence::create(fade_in, fade_out, NULL);
-	blinking_animate = RepeatForever::create(seq);
-	blinking_animate->retain();
-	blinking_animate->setTag(blinking);
-
 	return true;
 }
 
-void CUnitSprite::run_action_blinking_sprite() {
-	this->runAction(blinking_animate);
+void CUnitSprite::set_action_animate(const int _action)
+{
+	if (action_animate != nullptr)
+		delete action_animate;
+	switch (_action) {
+	case blinking: {
+		action_animate = new BlinkingAnimate();
+		action_animate->setTag(blinking);
+		break;
+	}
+	}
 }
+
+void CUnitSprite::run_action_animate(const int _action) {
+	set_action_animate(_action);
+	this->runAction(action_animate);
+}
+
+
+// stop_action 부분 수정 필요함 임시 작성상태
 void CUnitSprite::stop_action(const int _action) {
 	this->stopActionByTag(_action);
 	FadeIn* fade_in = FadeIn::create(0.3f);
 	this->runAction(fade_in);
 }
 
-void CUnitSprite::run_action_move_unit(const Vec2& _vec2) {
-	// 움직이고 있으면 멈추기
-	stop_action(move);
+void CUnitSprite::run_action_move_unit(const std::vector<Vec2*>& _vector) {
+	// 이동 경로 복사
+	move_path_vector = _vector;
+	// 처음 목표 지점 대입
+	move_target = (*move_path_vector.back());
+	// 대입한 목표 동적할당 해제
+	delete move_path_vector.back();
+	// vector에서 제거
+	move_path_vector.pop_back();
+	// 이동 스케쥴 동작 시작
+	this->scheduleUpdate();
+}
 
-	// 만들어둔 액션 삭제하기
-	if (!move_action_vector.empty()) {
-		int size = move_action_vector.size();
-		for (int i = 0; i < size; ++i) {
-			delete move_action_vector.at(i);
+void CUnitSprite::update(float _dt) {
+	goal_target_pos();
+	if (move_target != NULL) {
+		Vec2 pos = _position - move_target;
+		Vec2 move_vec2 = pos * _dt * move_speed;
+		_position += move_vec2;
+	}
+	else {
+		this->unscheduleUpdate();
+	}
+}
+
+void CUnitSprite::goal_target_pos() {
+	Rect bounding = this->getBoundingBox();
+	if (bounding.containsPoint(move_target)) {
+		delete move_path_vector.back();
+		move_path_vector.pop_back();
+		if (move_path_vector.size() > 0)
+			move_target = (*move_path_vector.back());
+		else {
+			move_target = NULL;
 		}
-		move_action_vector.clear();
 	}
+}
 
-	// 현재 위치 확인
-	int x = this->getPosition().x;
-	int y = this->getPosition().y;
-	
-	// 현재 위치와 목표 위치를 넘겨서 길찾기
-	path_manager->finding_path(x, y, _vec2.x, _vec2.y);
+void CUnitSprite::attack_unit(CUnitSprite * const _unit) {
 
-	// 길 찾은 결과 가져오기
-	//vector<PathFindingManager::vec2*> goal_path = path_manager->goal_path;
+	_unit->hp = 10;
 
-	// 경로에 맞춰 액션 만들기
-	int size = path_manager->goal_path.size();
-	for (int i = 0; i < size; ++i) {
-		auto move_to = MoveTo::create(0.01f, Vec2(path_manager->goal_path.back()->x, path_manager->goal_path.back()->y));
-		move_action_vector.pushBack(move_to);
-		
-		delete path_manager->goal_path.back();
-		path_manager->goal_path.erase(path_manager->goal_path.end() - 1);
-	}
-
-	// tag 붙이고 액션 실행
-	Sequence* move_action_seq = Sequence::create(move_action_vector);
-	move_action_seq->setTag(move);
-	this->runAction(move_action_seq);
 }
