@@ -21,7 +21,7 @@ CUnitSprite* UnitManager::create_unit() {
 void UnitManager::clear_selete_unit() {
 	int size = selete_unit_vector.size();
 	for (CUnitSprite* sprite : selete_unit_vector) {
-		sprite->stop_action();
+		sprite->stop_action_animate();
 	}
 	selete_unit_vector.clear();
 }
