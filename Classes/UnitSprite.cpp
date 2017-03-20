@@ -20,26 +20,27 @@ bool CUnitSprite::init() {
 }
 
 void CUnitSprite::run_action_animate(const int _action) {
-	set_action_animate(_action);
-	//this->runAction(action_animate);
-}
-
-void CUnitSprite::set_action_animate(const int _action) {
-	if (action_animate != nullptr)
-		delete action_animate;
+	stop_action_animate();		
 	switch (_action) {
 	case action_list::blinking: run_action_blinking(); break;
 	case action_list::attacking: run_action_attacking(); break;
-	case action_list::move: run_action_move(); break;
 	case action_list::die: run_action_die();  break;
+	case action_list::move: run_action_move(); break;
 	}
+	this->runAction(action_animate);
 }
 
 // stop_action 부분 수정 필요함 임시 작성상태
-void CUnitSprite::stop_action() {
-	this->stopActionByTag(action_tag);
-	action_tag = none;
+void CUnitSprite::stop_action_animate() {
+	if (action_animate != nullptr) {
+		this->stopActionByTag(action_tag);
+		delete action_animate;
+		action_animate = nullptr;
+		action_tag = none;
 
+		//액션을 멈추고 대기 상태로 전환하기
+
+	}
 	// 임시 작성부분
 	FadeIn* fade_in = FadeIn::create(0.3f);
 	this->runAction(fade_in);
@@ -81,7 +82,10 @@ void CUnitSprite::attact_unit(CUnitSprite * const _unit) {
 }
 
 void CUnitSprite::hit(const int _attack) {
-	hp -= (defence - _attack);
+	int dmg = _attack - defence;
+	if (dmg <= 0)
+		dmg = 1;
+	hp -= dmg;
 	if (hp <= 0) {
 		hp = 0;
 		run_action_animate(die);
@@ -96,8 +100,7 @@ void CUnitSprite::update(float _dt) {
 	if (move_target != nullptr) {
 		Vec2 direction = (*move_target) - _position;
 		direction.normalize();
-
-		// ********** 액션 동작 ***********
+		check_move_action(direction);
 		this->setPosition(_position + (direction * move_speed));
 	}
 	else {
@@ -106,19 +109,25 @@ void CUnitSprite::update(float _dt) {
 }
 
 void CUnitSprite::check_move_action(const cocos2d::Vec2 & _dir) {
+	ActionTag tmp_action_tag = action_list::move;
 	if (_dir.y > 0) {
-		if (_dir.x > 0)			action_tag = action_list::move_up_right;
-		else if (_dir.x < 0)	action_tag = action_list::move_up_left;
-		else					action_tag = action_list::move_up;
+		if (_dir.x > 0)			tmp_action_tag = action_list::move_up_right;
+		else if (_dir.x < 0)	tmp_action_tag = action_list::move_up_left;
+		else					tmp_action_tag = action_list::move_up;
 	}
 	else if (_dir.y < 0) {
-		if (_dir.x > 0)			action_tag = action_list::move_down_right;
-		else if (_dir.x < 0)	action_tag = action_list::move_down_left;
-		else					action_tag = action_list::move_down;
+		if (_dir.x > 0)			tmp_action_tag = action_list::move_down_right;
+		else if (_dir.x < 0)	tmp_action_tag = action_list::move_down_left;
+		else					tmp_action_tag = action_list::move_down;
 	}
 	else {
-		if (_dir.x > 0)			action_tag = action_list::move_right;
-		else if (_dir.x < 0)	action_tag = action_list::move_left;
+		if (_dir.x > 0)			tmp_action_tag = action_list::move_right;
+		else if (_dir.x < 0)	tmp_action_tag = action_list::move_left;
+	}
+
+	if (action_tag != tmp_action_tag) {
+		action_tag = tmp_action_tag;
+		run_action_animate(action_list::move);
 	}
 }
 

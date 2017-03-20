@@ -28,7 +28,7 @@ public:
 
 	
 	void run_action_animate(const int _action);
-	void stop_action();
+	void stop_action_animate();
 	void run_action_move_unit(const std::vector<cocos2d::Vec2*>& _vector);
 	void auto_targeting_unit(CUnitSprite* const _unit);
 	void targeting_unit(CUnitSprite* const _unit);
@@ -38,7 +38,6 @@ public:
 	inline const bool is_detected(const cocos2d::Vec2& _vec2, const float _range) const;
 
 private:
-	void set_action_animate(const int _action);
 	virtual void update(float _dt);
 	void check_move_action(const cocos2d::Vec2& _dir);
 	void goal_target_pos();
@@ -48,15 +47,15 @@ private:
 	virtual void run_action_attacking() {};
 	virtual void run_action_die() {};
 
-	cocos2d::RepeatForever* action_animate;
 	CUnitSprite* target_unit;
-	
 	std::vector<cocos2d::Vec2*> move_path_vector;
 	cocos2d::Vec2* move_target;
-	
-	typedef unsigned int ActionTag;		
+protected:
+	cocos2d::RepeatForever* action_animate;
+
+	typedef unsigned int ActionTag;
 	ActionTag action_tag;				// 현재 동작중인 액션을 저장한 변수
-	
+
 	unsigned int hp;
 	unsigned int attack;
 	unsigned int defence;
