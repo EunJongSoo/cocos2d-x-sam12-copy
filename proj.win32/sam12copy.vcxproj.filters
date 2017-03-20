@@ -16,8 +16,23 @@
     <Filter Include="src\1. PlayScene">
       <UniqueIdentifier>{f19e01ed-ea02-4257-8781-5bf495da1b1c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\1. PlayScene\UnitAnimate">
+    <Filter Include="src\1. PlayScene\Unit">
+      <UniqueIdentifier>{f98d8acc-c4c1-4ec6-8ff4-30fc5fe450fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\1. PlayScene\Unit\UnitAnimate">
       <UniqueIdentifier>{80e5c4a9-c5a8-401d-8a4a-aaab1dc37546}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\1. PlayScene\UI">
+      <UniqueIdentifier>{3c8055bb-ed5e-46e3-abc3-2c5299bf9faa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\0. etc\Path">
+      <UniqueIdentifier>{e0f2fac0-e00b-45f4-bb1a-bd1ec627b8a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\0. etc\Picking">
+      <UniqueIdentifier>{b0206758-d80b-4c17-a59f-3c542ed589cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\1. PlayScene\Unit\UnitSprite">
+      <UniqueIdentifier>{c57c9ba8-f103-4088-8df3-f2537e20a107}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -27,29 +42,32 @@
     <ClCompile Include="..\Classes\PlayScene.cpp">
       <Filter>src\1. PlayScene</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\UILayer.cpp">
-      <Filter>src\1. PlayScene</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\AppDelegate.cpp">
       <Filter>src\0. etc</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\UnitLayer.cpp">
-      <Filter>src\1. PlayScene</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\PickingManager.cpp">
-      <Filter>src\0. etc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\PathFindingManager.cpp">
-      <Filter>src\0. etc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\UnitManager.cpp">
-      <Filter>src\1. PlayScene</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\UnitSprite.cpp">
-      <Filter>src\1. PlayScene</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\EffectSprite.cpp">
       <Filter>src\1. PlayScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\UnitLayer.cpp">
+      <Filter>src\1. PlayScene\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\UnitManager.cpp">
+      <Filter>src\1. PlayScene\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\UILayer.cpp">
+      <Filter>src\1. PlayScene\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\PathFindingManager.cpp">
+      <Filter>src\0. etc\Path</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\PickingManager.cpp">
+      <Filter>src\0. etc\Picking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\UnitSprite.cpp">
+      <Filter>src\1. PlayScene\Unit\UnitSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\UnitSprite_SpearMan.cpp">
+      <Filter>src\1. PlayScene\Unit\UnitSprite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -59,38 +77,44 @@
     <ClInclude Include="..\Classes\PlayScene.h">
       <Filter>src\1. PlayScene</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\UILayer.h">
-      <Filter>src\1. PlayScene</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\AppDelegate.h">
       <Filter>src\0. etc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\UnitLayer.h">
-      <Filter>src\1. PlayScene</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Path.h">
-      <Filter>src\1. PlayScene</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\TemplateSingleton.h">
       <Filter>src\0. etc</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\PickingManager.h">
-      <Filter>src\0. etc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\PathFindingManager.h">
-      <Filter>src\0. etc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\UnitManager.h">
-      <Filter>src\1. PlayScene</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\UnitSprite.h">
-      <Filter>src\1. PlayScene</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\BlinkingAnimate.h">
-      <Filter>src\1. PlayScene\UnitAnimate</Filter>
+      <Filter>src\1. PlayScene\Unit\UnitAnimate</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\EffectSprite.h">
       <Filter>src\1. PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\UnitLayer.h">
+      <Filter>src\1. PlayScene\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\UnitManager.h">
+      <Filter>src\1. PlayScene\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\UILayer.h">
+      <Filter>src\1. PlayScene\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Path.h">
+      <Filter>src\0. etc\Path</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PathFindingManager.h">
+      <Filter>src\0. etc\Path</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PickingManager.h">
+      <Filter>src\0. etc\Picking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\UnitSprite.h">
+      <Filter>src\1. PlayScene\Unit\UnitSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\UnitSprite_SpearMan.h">
+      <Filter>src\1. PlayScene\Unit\UnitSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SpearManMoveAnimate.h">
+      <Filter>src\1. PlayScene\Unit\UnitAnimate</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
