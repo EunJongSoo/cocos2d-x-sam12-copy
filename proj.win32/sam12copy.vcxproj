@@ -151,7 +151,6 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\PlayScene.cpp" />
     <ClCompile Include="..\Classes\UILayer.cpp" />
     <ClCompile Include="..\Classes\UnitLayer.cpp" />
-    <ClCompile Include="..\Classes\UnitManager.cpp" />
     <ClCompile Include="..\Classes\UnitSprite.cpp" />
     <ClCompile Include="..\Classes\UnitSprite_SpearMan.cpp" />
     <ClCompile Include="main.cpp" />
@@ -164,11 +163,9 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\PathFindingManager.h" />
     <ClInclude Include="..\Classes\PickingManager.h" />
     <ClInclude Include="..\Classes\PlayScene.h" />
-    <ClInclude Include="..\Classes\SpearManMoveAnimate.h" />
     <ClInclude Include="..\Classes\TemplateSingleton.h" />
     <ClInclude Include="..\Classes\UILayer.h" />
     <ClInclude Include="..\Classes\UnitLayer.h" />
-    <ClInclude Include="..\Classes\UnitManager.h" />
     <ClInclude Include="..\Classes\UnitSprite.h" />
     <ClInclude Include="..\Classes\UnitSprite_SpearMan.h" />
     <ClInclude Include="main.h" />

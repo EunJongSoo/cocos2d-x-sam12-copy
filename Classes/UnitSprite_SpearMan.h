@@ -9,11 +9,6 @@ public:
 	virtual ~SpearMan();
 	virtual bool init();
 	CREATE_FUNC(SpearMan);
-
-private:
-	virtual void run_action_move() override;
-	virtual void run_action_attacking() override;
-	virtual void run_action_die() override;
 };
 
 #endif

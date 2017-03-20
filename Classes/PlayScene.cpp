@@ -1,7 +1,6 @@
 #include "PlayScene.h"
 #include "PickingManager.h"
 #include "PathFindingManager.h"
-#include "UnitManager.h"
 
 using namespace cocos2d;
 

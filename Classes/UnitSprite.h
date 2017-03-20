@@ -6,8 +6,8 @@
 
 class CUnitSprite : public cocos2d::Sprite {
 public:
-	enum action_list {
-		none,
+	typedef enum action_list {
+		idle,
 		blinking,
 		move,
 		move_up,
@@ -18,17 +18,17 @@ public:
 		move_up_right,
 		move_down_left,
 		move_down_right,
-		attacking, 
+		attacking,
 		die,
-	};
-	CUnitSprite();
+		count
+	} ActionTag;
+
 	virtual ~CUnitSprite();
 	virtual bool init();
 	CREATE_FUNC(CUnitSprite);
-
 	
-	void run_action_animate(const int _action);
-	void stop_action_animate();
+	//void run_action_animate(const int _action);
+	//void stop_action_animate();
 	void run_action_move_unit(const std::vector<cocos2d::Vec2*>& _vector);
 	void auto_targeting_unit(CUnitSprite* const _unit);
 	void targeting_unit(CUnitSprite* const _unit);
@@ -39,22 +39,27 @@ public:
 
 private:
 	virtual void update(float _dt);
+	void move_unit();
 	void check_move_action(const cocos2d::Vec2& _dir);
 	void goal_target_pos();
+	void set_action_tag(const ActionTag _tag);
 
 	void run_action_blinking();
-	virtual void run_action_move() {};
-	virtual void run_action_attacking() {};
-	virtual void run_action_die() {};
-
+	
 	CUnitSprite* target_unit;
 	std::vector<cocos2d::Vec2*> move_path_vector;
 	cocos2d::Vec2* move_target;
-protected:
-	cocos2d::RepeatForever* action_animate;
 
-	typedef unsigned int ActionTag;
-	ActionTag action_tag;				// 현재 동작중인 액션을 저장한 변수
+	
+	ActionTag action_tag;
+	ActionTag move_tag;
+
+	unsigned int frame;
+
+protected:
+	CUnitSprite();
+	cocos2d::Texture2D* texture[15];
+	void update_animation(float _dt);
 
 	unsigned int hp;
 	unsigned int attack;

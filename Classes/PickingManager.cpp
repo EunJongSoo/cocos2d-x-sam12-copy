@@ -67,9 +67,7 @@ void PickingManager::on_mouse_up_left(const Vec2& _vec2) {
 }
 
 void PickingManager::selete_unit_sprite(const cocos2d::Vec2 & _vec2) {
-	if (unit_layer->selete_unit(_vec2)) {
-		clear_selete_unit();
-	};
+	unit_layer->selete_unit(_vec2);
 }
 
 void PickingManager::on_mouse_up_right(const Vec2& _vec2) {
@@ -94,12 +92,6 @@ void PickingManager::on_key_pressed(EventKeyboard::KeyCode _code, Event *_event)
 void PickingManager::on_key_pressed_esc() {
 
 }
-
-void PickingManager::clear_selete_unit() {
-	unit_layer->clear_selete_unit();
-}
-
-
 
 //void CPikingManager::on_mouse_down(Event *_event)
 //{

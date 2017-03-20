@@ -14,10 +14,10 @@ public:
 	CREATE_FUNC(CUnitLayer);
 
 	void create_unit();
-	void clear_selete_unit();
-	const bool selete_unit(const cocos2d::Vec2& _vec2);
-	void blinking_selete_unit();
+	void selete_unit(const cocos2d::Vec2& _vec2);
 	void move_unit(const cocos2d::Vec2& _vec2);
+	void clear_selete_unit();
+
 private:
 	std::vector<CUnitSprite*> unit_vector;
 	std::vector<CUnitSprite*> selete_unit_vector;

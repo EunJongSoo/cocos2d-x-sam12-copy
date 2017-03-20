@@ -1,6 +1,6 @@
 #include "UnitLayer.h"
 #include "PathFindingManager.h"
-#include "UnitSprite.h"
+#include "UnitSprite_SpearMan.h"
 
 using namespace cocos2d;
 using std::vector;
@@ -18,7 +18,7 @@ bool CUnitLayer::init()
 }
 
 void CUnitLayer::create_unit() {
-	CUnitSprite* sprite = CUnitSprite::create();
+	CUnitSprite* sprite = SpearMan::create();
 	sprite->setPosition(500, 300);
 	sprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	unit_vector.push_back(sprite);
@@ -26,26 +26,19 @@ void CUnitLayer::create_unit() {
 }
 
 void CUnitLayer::clear_selete_unit() {
-	int size = selete_unit_vector.size();
-	for (CUnitSprite* sprite : selete_unit_vector) {
+	/*for (CUnitSprite* sprite : selete_unit_vector) {
 		sprite->stop_action_animate();
-	}
+	}*/
 	selete_unit_vector.clear();
 }
 
-const bool CUnitLayer::selete_unit(const cocos2d::Vec2& _vec2) {
+void CUnitLayer::selete_unit(const cocos2d::Vec2& _vec2) {
 	for (CUnitSprite* sprite : unit_vector) {
 		if (sprite->getBoundingBox().containsPoint(_vec2)) {
+			this->clear_selete_unit();
 			selete_unit_vector.push_back(sprite);
-			return true;
+			return;
 		}
-	}
-	return false;
-}
-
-void CUnitLayer::blinking_selete_unit() {
-	for (CUnitSprite* sprite : selete_unit_vector) {
-		sprite->run_action_animate(CUnitSprite::action_list::blinking);
 	}
 }
 

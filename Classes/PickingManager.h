@@ -20,8 +20,6 @@ private:
 	void on_mouse_up_right(const cocos2d::Vec2& _vec2);
 	void on_key_pressed(cocos2d::EventKeyboard::KeyCode _code, cocos2d::Event *_event);
 	void on_key_pressed_esc();
-
-	void clear_selete_unit();
 	void selete_unit_sprite(const cocos2d::Vec2& _vec2);
 
 	/*void on_mouse_down(cocos2d::Event*);
