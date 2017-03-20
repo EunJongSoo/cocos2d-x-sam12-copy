@@ -1,19 +1,14 @@
 #include "PickingManager.h"
 #include "PlayScene.h"
 #include "UnitLayer.h"
-#include "UnitManager.h"
-#include "PathFindingManager.h"
 #include "EffectSprite.h"
 
 using namespace cocos2d;
 
 PickingManager::PickingManager()
-	: play_scene(nullptr), unit_layer(nullptr), ui_layer(nullptr), 
-	path_manager(nullptr), unit_manager(nullptr) {}
+	: play_scene(nullptr), unit_layer(nullptr), ui_layer(nullptr) {}
 
-PickingManager::~PickingManager()
-{
-	delete unit_manager;
+PickingManager::~PickingManager() {
 }
 
 bool PickingManager::init()
@@ -24,8 +19,6 @@ bool PickingManager::init()
 	play_scene = static_cast<CPlayScene*>(Director::getInstance()->getRunningScene());
 	unit_layer = play_scene->unit_layer;
 	ui_layer = play_scene->ui_layer;
-	path_manager = play_scene->path_manager;
-	unit_manager = new UnitManager();
 
 	win_size = Director::getInstance()->getWinSize();
 
@@ -42,7 +35,7 @@ bool PickingManager::init()
 	keyboard_listener->onKeyPressed = CC_CALLBACK_2(PickingManager::on_key_pressed, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboard_listener, this);
 	
-	unit_layer->addChild(unit_manager->create_unit());
+	unit_layer->create_unit();
 	
 	return true;
 }
@@ -70,22 +63,13 @@ void PickingManager::on_mouse_up(Event *_event) {
 
 void PickingManager::on_mouse_up_left(const Vec2& _vec2) {
 	// 선택한 유닛 초기화
-	clear_selete_unit();
-	Vector<Node*> unit_vector = unit_layer->getChildren();
-	CUnitSprite* unit = get_unit_sprite(unit_vector, _vec2);
-	if (unit != nullptr) 
-		unit_manager->selete_unit(unit);
+	selete_unit_sprite(_vec2);
 }
 
-CUnitSprite* PickingManager::get_unit_sprite(const Vector<Node*>& _vector, const Vec2& _vec2)
-{
-	for (Node* node : _vector) {
-		Rect bounding = node->getBoundingBox();
-		if (bounding.containsPoint(_vec2)) {
-			return static_cast<CUnitSprite*>(node);
-		}
-	}
-	return nullptr;
+void PickingManager::selete_unit_sprite(const cocos2d::Vec2 & _vec2) {
+	if (unit_layer->selete_unit(_vec2)) {
+		clear_selete_unit();
+	};
 }
 
 void PickingManager::on_mouse_up_right(const Vec2& _vec2) {
@@ -96,7 +80,7 @@ void PickingManager::on_mouse_up_right(const Vec2& _vec2) {
 	eff->setPosition(_vec2);
 	eff->run_action_animate();*/
 
-	unit_manager->move_unit(_vec2);
+	unit_layer->move_unit(_vec2);
 }
 
 
@@ -111,9 +95,8 @@ void PickingManager::on_key_pressed_esc() {
 
 }
 
-void PickingManager::clear_selete_unit()
-{
-	unit_manager->clear_selete_unit();
+void PickingManager::clear_selete_unit() {
+	unit_layer->clear_selete_unit();
 }
 
 
